@@ -1,0 +1,116 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Update Appointment Status</title>
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #f4f6f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px; /* Increased padding */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .update-card {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+            max-width: 460px; /* slightly wider */
+            width: 100%;
+            padding: 40px 45px; /* increased padding */
+            transition: box-shadow 0.3s ease;
+            margin: 20px; /* add margin for breathing room */
+        }
+
+        .update-card:hover {
+            box-shadow: 0 6px 28px rgba(0,0,0,0.15);
+        }
+
+        h2 {
+            font-weight: 700;
+            margin-bottom: 30px; /* increased margin */
+            color: #333;
+            text-align: center;
+        }
+
+        label.form-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 12px; /* added margin */
+            display: block; /* ensure spacing below label */
+        }
+
+        select.form-select {
+            border-radius: 8px;
+            padding: 14px 16px; /* bigger padding for better UX */
+            font-size: 1.05rem;
+            color: #444;
+            transition: border-color 0.3s ease;
+        }
+
+        select.form-select:focus {
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+        }
+
+        .btn-primary {
+            width: 100%;
+            font-weight: 600;
+            padding: 14px;
+            font-size: 1.15rem;
+            border-radius: 8px;
+            margin-top: 20px; /* space above button */
+        }
+
+        .btn-secondary {
+            width: 100%;
+            margin-top: 14px;
+            font-weight: 600;
+            padding: 14px;
+            font-size: 1.15rem;
+            border-radius: 8px;
+            color: #495057;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+            transition: background-color 0.3s ease;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background-color: #ced4da;
+            color: #212529;
+            border-color: #adb5bd;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="update-card">
+        <h2>Update Appointment Status</h2>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="status" class="form-label">Select Status</label>
+                <select id="status" name="status" class="form-select" required>
+                    <option value="" disabled {% if not current_status %}selected{% endif %}>Choose status</option>
+                    <option value="Pending" {% if current_status == "Pending" %}selected{% endif %}>Pending</option>
+                    <option value="Completed" {% if current_status == "Completed" %}selected{% endif %}>Completed</option>
+                    <option value="Cancelled" {% if current_status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Status</button>
+            <a href="{% url 'admin' %}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

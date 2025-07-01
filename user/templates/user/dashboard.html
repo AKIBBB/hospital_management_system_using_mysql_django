@@ -1,0 +1,152 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+
+    <style>
+        table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin-top: 20px;
+}
+
+thead {
+  background-color: #007BFF;
+  color: white;
+}
+
+thead th {
+  padding: 12px 15px;
+  text-align: left;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+  background-color: #ddd;
+}
+
+tbody td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+}
+
+a {
+  color: #d9534f;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+      .navbar-nav .nav-link {
+  position: relative;
+  color: #333;              /* default text color */
+  transition: color 0.3s;
+}
+
+/* Change text color on hover/focus */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link:focus {
+  color: #007bff;           /* customize hover color */
+}
+
+/* Underline animation */
+.navbar-nav .nav-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #007bff;
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link:focus::after {
+  width: 100%;
+  left: 0;
+}
+
+  </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Smart Care</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto justify-content-center">
+        <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'doctor_list' %}">Doctor</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
+      </ul>
+
+      <ul class="navbar-nav">
+                <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Profile</a></li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <h1 style="text-align: center;">welcome to doctor</h1>
+    <h2 style="text-align: center;">Your Appointments</h2>
+{% if appointments %}
+<table>
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Email</th>
+            <th>Appointment Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for appointment in appointments %}
+        <tr>
+            <td>{{ appointment.first_name }} {{ appointment.last_name }}</td>
+            <td>{{ appointment.email }}</td>
+            <td>{{ appointment.appointment_date }}</td>
+            <td>{{ appointment.status }}</td>
+            <td>
+                {% if appointment.status != "Cancelled" %}
+                <a href="{% url 'cancel_appointment' appointment.appointment_id %}" 
+                   onclick="return confirm('Are you sure you want to cancel this appointment?');">
+                   Cancel
+                </a>
+                {% else %}
+                -
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+
+
+    </tbody>
+</table>
+
+{% else %}
+<p>No appointments found.</p>
+{% endif %}
+
+</body>
+</html>

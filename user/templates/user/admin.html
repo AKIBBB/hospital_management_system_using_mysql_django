@@ -1,0 +1,142 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+      padding: 30px;
+    }
+    .dashboard-card {
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 20px;
+      background-color: white;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+    .dashboard-card:hover {
+      transform: scale(1.02);
+    }
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: #0d6efd;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="mb-4 text-center">Admin Dashboard</h1>
+
+  <div class="row g-4 mb-5">
+    <!-- Doctors Card -->
+    <div class="col-md-4">
+      <div class="dashboard-card">
+        <div class="card-icon">🩺</div>
+        <h4>Total Doctors</h4>
+        <p class="fs-4">{{ doctors|length }}</p>
+        <a href="#doctors" class="btn btn-sm btn-outline-primary">View Doctors</a>
+      </div>
+    </div>
+
+    <!-- Patients Card -->
+    <div class="col-md-4">
+      <div class="dashboard-card">
+        <div class="card-icon">🧑‍⚕️</div>
+        <h4>Total Patients</h4>
+        <p class="fs-4">{{ patients|length }}</p>
+        <a href="#patients" class="btn btn-sm btn-outline-success">View Patients</a>
+      </div>
+    </div>
+
+    <!-- Appointments Card -->
+    <div class="col-md-4">
+      <div class="dashboard-card">
+        <div class="card-icon">📅</div>
+        <h4>Total Appointments</h4>
+        <p class="fs-4">{{ appointments|length }}</p>
+        <a href="#appointments" class="btn btn-sm btn-outline-secondary">View Appointments</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sections below -->
+  <hr>
+  <h3 id="doctors">👨‍⚕️ Doctors</h3>
+  {% if doctors %}
+    <table class="table table-bordered">
+      <thead><tr><th>ID</th><th>Name</th><th>Specialization</th><th>Email</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for d in doctors %}
+        <tr>
+          <td>{{ d.0 }}</td>
+          <td>{{ d.1 }} {{ d.2 }}</td>
+          <td>{{ d.3 }}</td>
+          <td>{{ d.4 }}</td>
+          <td><a href="{% url 'remove_doctor' doctor_id=d.0 %}" class="btn btn-sm btn-danger">Remove</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No doctors found.</p>
+  {% endif %}
+  <a href="{% url 'add_doctor' %}" class="btn btn-primary mb-5">Add Doctor</a>
+  
+
+
+  <h3 id="patients">🧍 Patients</h3>
+  {% if patients %}
+    <table class="table table-bordered">
+      <thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Actions</th></tr></thead>
+      <tbody>
+        {% for p in patients %}
+        <tr>
+          <td>{{ p.0 }}</td>
+          <td>{{ p.1 }} {{ p.2 }}</td>
+          <td>{{ p.3 }}</td>
+          <td><a href="{% url 'remove_patient' patient_id=p.0 %}" class="btn btn-sm btn-danger">Remove</a></td>
+          
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No patients found.</p>
+  {% endif %}
+  <a href="{% url 'add_patient' %}" class="btn btn-success mb-5">Add Patient</a>
+
+  <h3 id="appointments">📅 Appointments</h3>
+  {% if appointments %}
+    <table class="table table-bordered">
+      <thead>
+        <tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Date</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for a in appointments %}
+        <tr>
+          <td>{{ a.0 }}</td>
+          <td>{{ a.1 }} {{ a.2 }}</td>
+          <td>{{ a.3 }} {{ a.4 }}</td>
+          <td>{{ a.5 }}</td>
+          <td>{{ a.6 }}</td>
+          <td>
+            
+            <a href="{% url 'update_appointment' appointment_id=a.0 %}" class="btn btn-sm btn-warning">Update</a>
+            <a href="{% url 'cancel_appointment' appointment_id=a.0 %}" class="btn btn-sm btn-danger">Cancel</a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>No appointments found.</p>
+  {% endif %}
+  <a href="{% url 'book_appointment' %}" class="btn btn-secondary">Add Appointment</a>
+
+</body>
+</html>

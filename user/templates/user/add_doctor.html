@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Add Doctor - Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 520px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+            padding: 2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card-header {
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: #2575fc;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            border-bottom: 2px solid #2575fc;
+            padding-bottom: 0.5rem;
+        }
+
+        label.form-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        input.form-control {
+            border-radius: 8px;
+            border: 1.5px solid #ddd;
+            padding: 0.6rem 1rem;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input.form-control:focus {
+            border-color: #2575fc;
+            box-shadow: 0 0 8px rgba(37, 117, 252, 0.4);
+        }
+
+        .btn-primary {
+            background-color: #2575fc;
+            border: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            padding: 0.75rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #1a52d8;
+        }
+
+        .btn-secondary {
+            background-color: #e9ecef;
+            color: #333;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d6d8db;
+            color: #2575fc;
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card shadow-sm">
+        <div class="card-header">Add Doctor</div>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="first_name" class="form-label">First Name</label>
+                <input id="first_name" name="first_name" type="text" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="last_name" class="form-label">Last Name</label>
+                <input id="last_name" name="last_name" type="text" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input id="email" name="email" type="email" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="specialization" class="form-label">Specialization</label>
+                <input id="specialization" name="specialization" type="text" class="form-control" required />
+            </div>
+            <div class="form-group mb-4">
+                <label for="password" class="form-label">Password</label>
+                <input id="password" name="password" type="password" class="form-control" required />
+            </div>
+            <div class="d-grid gap-3">
+                <button type="submit" class="btn btn-primary">Add Doctor</button>
+                <a href="{% url 'admin' %}" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Patient</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Add Patient</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" name="first_name" class="form-control" required>
+        </div>
+
+        <div class="form-group mt-2">
+            <label>Last Name</label>
+            <input type="text" name="last_name" class="form-control" required>
+        </div>
+
+        <div class="form-group mt-2">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" required>
+        </div>
+
+        <div class="form-group mt-2">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">Add Patient</button>
+        <a href="{% url 'admin' %}" class="btn btn-secondary mt-3">Back</a>
+    </form>
+</div>
+</body>
+</html>

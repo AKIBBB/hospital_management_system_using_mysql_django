@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Book an Appointment</title>
+<style>
+  body {
+    background-color: #f7f9fc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 40px 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .appointment-form {
+    background: #ffffff;
+    max-width: 480px;
+    width: 100%;
+    padding: 30px 35px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+
+  .appointment-form h2 {
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #0d6efd;
+    text-align: center;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    margin-top: 20px;
+  }
+
+  select, input[type="datetime-local"] {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1.8px solid #ced4da;
+    font-size: 1rem;
+    color: #444;
+    transition: border-color 0.3s ease;
+  }
+
+  select:focus, input[type="datetime-local"]:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.3);
+  }
+
+  button {
+    margin-top: 30px;
+    width: 100%;
+    background-color: #0d6efd;
+    border: none;
+    color: white;
+    padding: 14px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #0b5ed7;
+  }
+</style>
+</head>
+<body>
+
+<div class="appointment-form">
+  <h2>Book an Appointment</h2>
+  <form method="POST" action="{% url 'book_appointment' %}">
+    {% csrf_token %}
+
+    <label for="doctor">Select Doctor:</label>
+    <select id="doctor" name="doctor_id" required>
+      {% for doc in doctors %}
+        <option value="{{ doc.doctor_id }}">
+          Dr. {{ doc.first_name }} {{ doc.last_name }} - {{ doc.specialization }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <label for="appointment_date">Appointment Date:</label>
+    <input id="appointment_date" type="datetime-local" name="appointment_date" required>
+
+    <button type="submit">Book Appointment</button>
+  </form>
+</div>
+
+</body>
+</html>

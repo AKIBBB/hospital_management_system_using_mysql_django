@@ -1,0 +1,148 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+
+<style>
+  .profile-card {
+    max-width: 600px;
+    margin: 30px auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .profile-header {
+    background: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+  }
+  .profile-header img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    border: 3px solid #0d6efd;
+  }
+  .profile-body {
+    padding: 20px;
+  }
+  .profile-body h2 {
+    margin-bottom: .5rem;
+  }
+  .appointment-list li {
+    margin-bottom: .75rem;
+  }
+
+  .navbar-nav .nav-link {
+    position: relative;
+    color: #333;
+    transition: color 0.3s;
+  }
+
+  .navbar-nav .nav-link:hover,
+  .navbar-nav .nav-link:focus {
+    color: #007bff;
+  }
+
+  .navbar-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #007bff;
+    transition: width 0.3s ease, left 0.3s ease;
+  }
+
+  .navbar-nav .nav-link:hover::after,
+  .navbar-nav .nav-link:focus::after {
+    width: 100%;
+    left: 0;
+  }
+</style>
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Smart Care</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#navbarNav" aria-controls="navbarNav"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto justify-content-center">
+        <li class="nav-item"><a class="nav-link active" href="#">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'doctor_list' %}">Doctor</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Contact Us</a></li>
+      </ul>
+
+      <ul class="navbar-nav">
+        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="card profile-card">
+  <div class="profile-header">
+    {% if user_info.image %}
+      <img src="/media/{{ user_info.image }}" alt="Profile picture">
+    {% endif %}
+    <h2>{{ user_info.first_name }} {{ user_info.last_name }}</h2>
+    <p class="text-muted">{{ user_info.email }}</p>
+    <span class="badge bg-primary">{{ user_info.user_type|capfirst }}</span>
+  </div>
+  <div class="profile-body">
+    {% if user_info.user_type == 'patient' %}
+      <h4>Booking History</h4>
+      {% if appointments %}
+        <ul class="list-unstyled appointment-list">
+          {% for a in appointments %}
+            <li>📅 <strong>{{ a.1 }}</strong> — with Dr. {{ a.2 }} {{ a.3 }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No appointments yet.</p>
+      {% endif %}
+
+      {% if prescriptions %}
+        <hr>
+        <h4>Prescriptions</h4>
+        <ul class="list-unstyled">
+          {% for p in prescriptions %}
+            <li>📝 {{ p.0 }}<br><small class="text-muted">Date: {{ p.1 }}</small></li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+    {% elif user_info.user_type == 'doctor' %}
+      <h4>Appointments with Patients</h4>
+      {% if appointments %}
+        <ul class="list-unstyled appointment-list">
+          {% for a in appointments %}
+          <li>
+            🩺 <strong>{{ a.1 }}</strong> — Patient: {{ a.2 }} {{ a.3 }}
+            
+
+            <!-- Prescription Form -->
+            <form method="post" action="{% url 'prescribe_patient' appointment_id=a.0 %}" class="mt-2">
+              {% csrf_token %}
+              <div class="input-group">
+                <textarea name="description" class="form-control form-control-sm" rows="2" placeholder="Write prescription..." required></textarea>
+                <button type="submit" class="btn btn-sm btn-success">Prescribe</button>
+              </div>
+            </form>
+          </li>
+          {% endfor %}
+          <a href="{% url 'dashboard' %}">Go to Dashboard</a>
+        </ul>
+      {% else %}
+        <p>No appointments yet.</p>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.0/dist/js/bootstrap.bundle.min.js"></script>
